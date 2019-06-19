@@ -49,6 +49,21 @@
                 <artifactId>logback-classic</artifactId>
                 <version>1.2.3</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.9</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliware.tianchi</groupId>
+                <artifactId>service-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>
@@ -69,5 +84,8 @@
         <module>workspace-common</module>
         <module>workspace-gateway</module>
         <module>workspace-provider</module>
+        <module>service-api</module>
+        <module>service-consumer</module>
+        <module>service-provider</module>
     </modules>
 </project>
