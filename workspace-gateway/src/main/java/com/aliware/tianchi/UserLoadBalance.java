@@ -1,6 +1,5 @@
 package com.aliware.tianchi;
 
-import com.aliware.tianchi.common.StatisticOps;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
