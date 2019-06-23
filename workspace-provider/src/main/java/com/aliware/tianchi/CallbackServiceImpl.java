@@ -1,5 +1,7 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.common.RequestStat;
+import com.aliware.tianchi.common.TimeSliceOps;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 import org.apache.dubbo.rpc.service.CallbackService;
 
@@ -25,14 +27,18 @@ public class CallbackServiceImpl implements CallbackService {
                 if (!listeners.isEmpty()) {
                     for (Map.Entry<String, CallbackListener> entry : listeners.entrySet()) {
                         try {
-                            entry.getValue().receiveServerMsg(System.getProperty("quota") + " " + new Date().toString());
+//                            entry.getValue().receiveServerMsg(System.getProperty("quota") + " " + new Date().toString());
+                            entry.getValue().receiveServerMsg(System.getProperty("quota") +
+                                    "," + TimeSliceOps.getBeforeIndex() +
+                                    "," + TimeSliceOps.getBeforeCount(RequestStat.OK)
+                            + "," + TimeSliceOps.getBeforeCount(RequestStat.FAIL));
                         } catch (Throwable t1) {
                             listeners.remove(entry.getKey());
                         }
                     }
                 }
             }
-        }, 0, 5000);
+        }, 0, 500);
     }
 
     private Timer timer = new Timer();

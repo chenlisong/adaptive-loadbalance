@@ -1,5 +1,6 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.common.StatisticOps;
 import org.apache.dubbo.rpc.listener.CallbackListener;
 
 /**
@@ -15,6 +16,17 @@ public class CallbackListenerImpl implements CallbackListener {
     @Override
     public void receiveServerMsg(String msg) {
         System.out.println("receive msg from server :" + msg);
+        String[] info = msg.split(",");
+        if(info.length != 4) {
+            return;
+        }
+
+        String quota = info[0];
+        int sliceIndex = Integer.parseInt(info[1]);
+        int ok = Integer.parseInt(info[2]);
+        int fail = Integer.parseInt(info[3]);
+        StatisticOps.putDate(quota, ok, sliceIndex);
+
     }
 
 }
