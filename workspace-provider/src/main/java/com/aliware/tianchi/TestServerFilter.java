@@ -21,12 +21,13 @@ import org.apache.dubbo.rpc.RpcException;
 public class TestServerFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
+        long begin = System.currentTimeMillis();
         try{
             Result result = invoker.invoke(invocation);
-            TimeSliceOps.operate(RequestStat.OK);
+            TimeSliceOps.operate(RequestStat.OK, System.currentTimeMillis() - begin);
             return result;
         }catch (Exception e){
-            TimeSliceOps.operate(RequestStat.FAIL);
+            TimeSliceOps.operate(RequestStat.FAIL, System.currentTimeMillis() - begin);
             throw e;
         }
 

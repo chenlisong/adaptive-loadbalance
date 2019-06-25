@@ -26,7 +26,14 @@ public class TimeSlice {
 
     private int beforeFailCount = 0;
 
-    public TimeSlice() {
+    // 限流使用
+    private volatile int currentSliceIndex = -1;
+
+    private LongAdder currentSliceCost = new LongAdder();
+
+    public TimeSlice(int slices, int seconds) {
+        this.seconds = seconds;
+        this.slices = slices;
         this.init();
     }
 
@@ -37,13 +44,23 @@ public class TimeSlice {
         });
     }
 
-    public void request(RequestStat stat) {
+    public void request(RequestStat stat, long cost) {
         int index = (int)(System.currentTimeMillis() / slices % size);
         if(stat == RequestStat.OK) {
             sucSlices[index].increment();
         }else if(stat == RequestStat.FAIL) {
             failSlices[index].increment();
         }
+
+        if(index != currentSliceIndex) {
+            synchronized(this){
+                if(index != currentSliceIndex) {
+                    currentSliceCost = new LongAdder();
+                    currentSliceIndex = index;
+                }
+            }
+        }
+        currentSliceCost.add(cost);
     }
 
     public int beforeIndex() {
@@ -88,14 +105,27 @@ public class TimeSlice {
         }
     }
 
+    public long getCurrentSliceCost() {
+        int index = (int)(System.currentTimeMillis() / slices % size);
+        if(index != currentSliceIndex) {
+            synchronized (this) {
+                if(index != currentSliceIndex) {
+                    currentSliceCost = new LongAdder();
+                    currentSliceIndex = index;
+                }
+            }
+        }
+        return currentSliceCost.longValue();
+    }
+
     public static void main(String[] args) {
-        TimeSlice ts = new TimeSlice();
+        TimeSlice ts = new TimeSlice(500, 60);
         ts.init();
         IntStream.rangeClosed(0, 10).forEach(unit -> {
-            ts.request(RequestStat.OK);
+            ts.request(RequestStat.OK, 10);
         });
         IntStream.rangeClosed(0, 10).forEach(unit -> {
-            ts.request(RequestStat.OK);
+            ts.request(RequestStat.OK, 10);
         });
 
         System.out.println(ts.beforeCount(RequestStat.OK));
