@@ -20,7 +20,7 @@ public class SmallConfig extends BaseConfig {
     private final List<ThrashConfig> allConfig = Collections.unmodifiableList(Arrays.asList(warmUp, min, normal, max));
 
     public SmallConfig() {
-        super(200, 20880);
+        super(20, 20880);
     }
 
     @Override

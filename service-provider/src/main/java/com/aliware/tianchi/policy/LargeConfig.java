@@ -19,7 +19,7 @@ public class LargeConfig extends BaseConfig {
     private final List<ThrashConfig> allConfig = Collections.unmodifiableList(Arrays.asList(warmUp, min, normal, max));
 
     public LargeConfig() {
-        super(650, 20890);
+        super(65, 20890);
     }
 
     @Override
