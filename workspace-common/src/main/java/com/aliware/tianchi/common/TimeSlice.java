@@ -29,7 +29,7 @@ public class TimeSlice {
     // 限流使用
     private volatile int currentSliceIndex = -1;
 
-    private LongAdder currentSliceCost = new LongAdder();
+    private ThreadLocal<Long> currentSliceCost = new ThreadLocal<>();
 
     public TimeSlice(int slices, int seconds) {
         this.seconds = seconds;
@@ -55,12 +55,12 @@ public class TimeSlice {
         if(index != currentSliceIndex) {
             synchronized(this){
                 if(index != currentSliceIndex) {
-                    currentSliceCost = new LongAdder();
+                    currentSliceCost.set(0L);
                     currentSliceIndex = index;
                 }
             }
         }
-        currentSliceCost.add(cost);
+        currentSliceCost.set(currentSliceCost.get() + cost);
     }
 
     public int beforeIndex() {
@@ -110,12 +110,12 @@ public class TimeSlice {
         if(index != currentSliceIndex) {
             synchronized (this) {
                 if(index != currentSliceIndex) {
-                    currentSliceCost = new LongAdder();
+                    currentSliceCost.set(0L);
                     currentSliceIndex = index;
                 }
             }
         }
-        return currentSliceCost.longValue();
+        return currentSliceCost.get();
     }
 
     public static void main(String[] args) {

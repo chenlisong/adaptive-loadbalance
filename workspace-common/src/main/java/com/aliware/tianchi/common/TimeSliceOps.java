@@ -2,7 +2,7 @@ package com.aliware.tianchi.common;
 
 public class TimeSliceOps {
 
-    public static int slice = 500;
+    public static int slice = 1000;
 
     public static int seconds = 60;
 

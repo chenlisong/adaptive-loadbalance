@@ -1,5 +1,6 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.common.RequestStat;
 import com.aliware.tianchi.common.TimeSliceOps;
 import org.apache.dubbo.remoting.exchange.Request;
 import org.apache.dubbo.remoting.transport.RequestLimiter;
@@ -21,8 +22,9 @@ public class TestRequestLimiter implements RequestLimiter {
      */
     @Override
     public boolean tryAcquire(Request request, int activeTaskCount) {
-
-        if(TimeSliceOps.getCurrentSliceCost() > TimeSliceOps.slice * activeTaskCount) {
+//        int maxCount = activeTaskCount == 0 ? TimeSliceOps.slice: TimeSliceOps.slice * activeTaskCount;
+        if(TimeSliceOps.getCurrentSliceCost() > TimeSliceOps.slice) {
+            TimeSliceOps.operate(RequestStat.FAIL, 0);
             return false;
         }
 

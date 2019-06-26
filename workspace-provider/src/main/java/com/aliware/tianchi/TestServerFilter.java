@@ -27,7 +27,8 @@ public class TestServerFilter implements Filter {
             TimeSliceOps.operate(RequestStat.OK, System.currentTimeMillis() - begin);
             return result;
         }catch (Exception e){
-            TimeSliceOps.operate(RequestStat.FAIL, System.currentTimeMillis() - begin);
+//            System.out.println("4444444....");
+            //TimeSliceOps.operate(RequestStat.FAIL, System.currentTimeMillis() - begin);
             throw e;
         }
 
@@ -35,6 +36,9 @@ public class TestServerFilter implements Filter {
 
     @Override
     public Result onResponse(Result result, Invoker<?> invoker, Invocation invocation) {
+//        if(result.hasException()) {
+//            System.out.println("222222222: " + result.hasException() + result.getValue().toString());
+//        }
         return result;
     }
 

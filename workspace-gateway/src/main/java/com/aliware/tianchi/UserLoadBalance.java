@@ -36,12 +36,12 @@ public class UserLoadBalance implements LoadBalance {
 //        LOGGER.info("invoke1 info : " + invokers.get(0).getUrl().getAddress());
 //        LOGGER.info("invoke2 info : " + invokers.get(1).getUrl().getAddress());
 
-//        String[] addrsses = new String[invokers.size()];
+        String[] addrsses = new String[invokers.size()];
 
-//        for(int i=0; i<invokers.size(); i++) {
-//            addrsses[i] = invokers.get(i).getUrl().getAddress();
-//        }
-        return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
-        //return invokers.get(StatisticOps.getIndex(addrsses));
+        for(int i=0; i<invokers.size(); i++) {
+            addrsses[i] = invokers.get(i).getUrl().getAddress();
+        }
+//        return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
+        return invokers.get(StatisticOps.getIndex(addrsses));
     }
 }
