@@ -1,5 +1,7 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.common.RequestStat;
+import com.aliware.tianchi.common.TimeSlice;
 import com.aliware.tianchi.common.TimeSliceOps;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.logger.Logger;
@@ -10,6 +12,9 @@ import org.apache.dubbo.rpc.RpcException;
 import org.apache.dubbo.rpc.cluster.LoadBalance;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author daofeng.xjf
@@ -23,6 +28,17 @@ public class UserLoadBalance implements LoadBalance {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserLoadBalance.class);
 
+    public UserLoadBalance() {
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(()-> {
+            Map<Invoker, TimeSlice> invokeTsMap = TimeSliceOps.getInvokeTsMap();
+            if(invokeTsMap.size() > 0) {
+                invokeTsMap.forEach((invoker, ts)-> {
+                    LOGGER.info("address: " + invoker.getUrl().getAddress()+ ", index: "+ts.beforeIndex() + ", ok count: " + ts.beforeCount(RequestStat.OK)
+                    + ", fail count: " + ts.beforeCount(RequestStat.FAIL));
+                });
+            }
+        },1,1, TimeUnit.SECONDS);
+    }
 
     @Override
     public <T> Invoker<T> select(List<Invoker<T>> invokers, URL url, Invocation invocation) throws RpcException {

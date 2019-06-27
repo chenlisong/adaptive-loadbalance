@@ -82,6 +82,10 @@ public class TimeSlice {
         currentThreads.add(Thread.currentThread().getId());
     }
 
+    public int beforeIndex() {
+        return (int) (System.currentTimeMillis() / slices % size);
+    }
+
     public int beforeCount(RequestStat stat) {
         int index = (int)(System.currentTimeMillis() / slices % size);
 

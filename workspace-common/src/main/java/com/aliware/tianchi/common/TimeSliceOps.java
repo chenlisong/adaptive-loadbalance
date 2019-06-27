@@ -69,8 +69,8 @@ public class TimeSliceOps {
     }
 
 
-    public static int getBeforeCount(RequestStat stat) {
-        return providerTs.beforeCount(stat);
+    public static Map<Invoker, TimeSlice> getInvokeTsMap() {
+        return invokeTsMap;
     }
 
     public static long getCurrentSliceCost() {
