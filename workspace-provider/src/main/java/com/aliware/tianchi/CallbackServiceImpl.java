@@ -27,11 +27,11 @@ public class CallbackServiceImpl implements CallbackService {
                 if (!listeners.isEmpty()) {
                     for (Map.Entry<String, CallbackListener> entry : listeners.entrySet()) {
                         try {
-//                            entry.getValue().receiveServerMsg(System.getProperty("quota") + " " + new Date().toString());
-                            entry.getValue().receiveServerMsg(System.getProperty("quota") +
-                                    "," + TimeSliceOps.getBeforeIndex() +
-                                    "," + TimeSliceOps.getBeforeCount(RequestStat.OK)
-                            + "," + TimeSliceOps.getBeforeCount(RequestStat.FAIL));
+                            entry.getValue().receiveServerMsg(System.getProperty("quota") + " " + new Date().toString());
+//                            entry.getValue().receiveServerMsg(System.getProperty("quota") +
+//                                    "," + TimeSliceOps.getBeforeIndex() +
+//                                    "," + TimeSliceOps.getBeforeCount(RequestStat.OK)
+//                            + "," + TimeSliceOps.getBeforeCount(RequestStat.FAIL));
                         } catch (Throwable t1) {
                             listeners.remove(entry.getKey());
                         }

@@ -22,12 +22,9 @@ public class TestRequestLimiter implements RequestLimiter {
      */
     @Override
     public boolean tryAcquire(Request request, int activeTaskCount) {
-//        int maxCount = activeTaskCount == 0 ? TimeSliceOps.slice: TimeSliceOps.slice * activeTaskCount;
-        if(TimeSliceOps.getCurrentSliceCost() > TimeSliceOps.slice) {
-            TimeSliceOps.operate(RequestStat.FAIL, 0);
+        if(TimeSliceOps.getCurrentSliceCost() > TimeSliceOps.slice || TimeSliceOps.getcurrentThreads() > activeTaskCount) {
             return false;
         }
-
         return true;
     }
 

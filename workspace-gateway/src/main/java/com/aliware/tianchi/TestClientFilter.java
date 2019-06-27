@@ -1,5 +1,7 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.common.RequestStat;
+import com.aliware.tianchi.common.TimeSliceOps;
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.extension.Activate;
 import org.apache.dubbo.rpc.Filter;
@@ -21,8 +23,10 @@ public class TestClientFilter implements Filter {
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         try{
             Result result = invoker.invoke(invocation);
+            TimeSliceOps.request4Stat(invoker, RequestStat.OK);
             return result;
         }catch (Exception e){
+            TimeSliceOps.request4Stat(invoker, RequestStat.FAIL);
             throw e;
         }
 

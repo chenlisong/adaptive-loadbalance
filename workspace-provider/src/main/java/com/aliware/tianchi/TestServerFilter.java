@@ -24,7 +24,7 @@ public class TestServerFilter implements Filter {
         long begin = System.currentTimeMillis();
         try{
             Result result = invoker.invoke(invocation);
-            TimeSliceOps.operate(RequestStat.OK, System.currentTimeMillis() - begin);
+            TimeSliceOps.operate4Cost(System.currentTimeMillis() - begin);
             return result;
         }catch (Exception e){
 //            System.out.println("4444444....");
