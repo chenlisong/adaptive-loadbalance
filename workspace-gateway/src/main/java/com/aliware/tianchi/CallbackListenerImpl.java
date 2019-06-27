@@ -1,7 +1,15 @@
 package com.aliware.tianchi;
 
+import com.aliware.tianchi.common.RequestStat;
 import com.aliware.tianchi.common.StatisticOps;
+import com.aliware.tianchi.common.TimeSlice;
+import com.aliware.tianchi.common.TimeSliceOps;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.listener.CallbackListener;
+
+import java.util.Map;
 
 /**
  * @author daofeng.xjf
@@ -12,20 +20,29 @@ import org.apache.dubbo.rpc.listener.CallbackListener;
  *
  */
 public class CallbackListenerImpl implements CallbackListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CallbackListenerImpl.class);
 
     @Override
     public void receiveServerMsg(String msg) {
         System.out.println("receive msg from server :" + msg);
-        String[] info = msg.split(",");
-        if(info.length != 4) {
-            return;
-        }
+//        String[] info = msg.split(",");
+//        if(info.length != 4) {
+//            return;
+//        }
+//
+//        String quota = info[0];
+//        int sliceIndex = Integer.parseInt(info[1]);
+//        int ok = Integer.parseInt(info[2]);
+//        int fail = Integer.parseInt(info[3]);
+//        StatisticOps.putDate(quota, ok, sliceIndex);
 
-        String quota = info[0];
-        int sliceIndex = Integer.parseInt(info[1]);
-        int ok = Integer.parseInt(info[2]);
-        int fail = Integer.parseInt(info[3]);
-        StatisticOps.putDate(quota, ok, sliceIndex);
+        Map<Invoker, TimeSlice> invokeTsMap = TimeSliceOps.getInvokeTsMap();
+        if(invokeTsMap.size() > 0) {
+            invokeTsMap.forEach((invoker, ts)-> {
+                LOGGER.info("address: " + invoker.getUrl().getAddress()+ ", index: "+ts.beforeIndex() + ", ok count: " + ts.beforeCount(RequestStat.OK)
+                        + ", fail count: " + ts.beforeCount(RequestStat.FAIL));
+            });
+        }
 
     }
 
