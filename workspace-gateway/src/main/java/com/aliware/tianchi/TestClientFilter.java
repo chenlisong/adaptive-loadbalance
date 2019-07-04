@@ -23,10 +23,10 @@ public class TestClientFilter implements Filter {
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         try{
             Result result = invoker.invoke(invocation);
-//            TimeSliceOps.request4Stat(invoker, RequestStat.OK);
+            TimeSliceOps.request4Stat(invoker, RequestStat.OK);
             return result;
         }catch (Exception e){
-//            TimeSliceOps.request4Stat(invoker, RequestStat.FAIL);
+            TimeSliceOps.request4Stat(invoker, RequestStat.FAIL);
             throw e;
         }
 

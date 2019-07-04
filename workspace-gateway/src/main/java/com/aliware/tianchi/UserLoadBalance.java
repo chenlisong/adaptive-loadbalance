@@ -43,11 +43,11 @@ public class UserLoadBalance implements LoadBalance {
 //        }
 //        return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
 //        return invokers.get(StatisticOps.getIndex(addrsses));
-//        try {
-//            return TimeSliceOps.rebalance((List<Invoker<T>>) invokers);
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            return TimeSliceOps.rebalance((List<Invoker<T>>) invokers);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return invokers.get(ThreadLocalRandom.current().nextInt(invokers.size()));
     }

@@ -91,7 +91,7 @@ public class HttpProcessHandler extends SimpleChannelInboundHandler<FullHttpRequ
         List<URL> urls = new ArrayList<>();
         // 配置直连的 provider 列表
         urls.add(new URL(Constants.DUBBO_PROTOCOL, "provider-small", 20880, interfaceName, attributes));
-//        urls.add(new URL(Constants.DUBBO_PROTOCOL, "provider-medium", 20870, interfaceName, attributes));
+        urls.add(new URL(Constants.DUBBO_PROTOCOL, "provider-medium", 20870, interfaceName, attributes));
 //        urls.add(new URL(Constants.DUBBO_PROTOCOL, "provider-large", 20890, interfaceName, attributes));
         return urls;
     }

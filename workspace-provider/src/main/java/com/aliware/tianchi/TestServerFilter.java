@@ -1,6 +1,7 @@
 package com.aliware.tianchi;
 
 import com.aliware.tianchi.common.RequestStat;
+import com.aliware.tianchi.common.RtStat;
 import com.aliware.tianchi.common.TimeSliceOps;
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.extension.Activate;
@@ -24,6 +25,8 @@ public class TestServerFilter implements Filter {
         long begin = System.currentTimeMillis();
         try{
             Result result = invoker.invoke(invocation);
+            long now = System.currentTimeMillis();
+            RtStat.stat(now-begin, now);
 //            TimeSliceOps.operate4Cost(System.currentTimeMillis() - begin);
             return result;
         }catch (Exception e){
