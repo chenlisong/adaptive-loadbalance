@@ -20,7 +20,7 @@ public class MediumConfig extends BaseConfig {
     private final List<ThrashConfig> allConfig = Collections.unmodifiableList(Arrays.asList(warmUp, normal, max, min));
 
     public MediumConfig() {
-        super(45, 20870);
+        super(80, 20870);
     }
 
     @Override

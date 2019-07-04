@@ -22,10 +22,11 @@ public class TestRequestLimiter implements RequestLimiter {
      */
     @Override
     public boolean tryAcquire(Request request, int activeTaskCount) {
+        System.out.println("activeTaskCount: " + activeTaskCount);
 //        if(TimeSliceOps.getCurrentSliceCost() > TimeSliceOps.slice || TimeSliceOps.getcurrentThreads() > activeTaskCount) {
-        if(TimeSliceOps.getCurrentSliceCost() > TimeSliceOps.slice) {
-            return false;
-        }
+//        if(TimeSliceOps.getCurrentSliceCost() > TimeSliceOps.slice) {
+//            return false;
+//        }
         return true;
     }
 
