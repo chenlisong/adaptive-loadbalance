@@ -101,19 +101,13 @@ public class RtStat {
     }
 
     private static int getGap(int activeCountTask) {
-        if(activeCountTask < 190) {
-            return 45;
-        }else if(activeCountTask < 200) {
-            return 3;
-        }else if(activeCountTask < 440) {
-            return 40;
-        }else if(activeCountTask < 449) {
-            return 3;
-        }else if(activeCountTask < 650) {
-            return 50;
-        }else{
-            return 80;
+        if(activeCountTask < 200 && activeCountTask >= 160) {
+            return 10;
+        }else if(activeCountTask < 450 && activeCountTask >= 400) {
+            return 10;
         }
+
+        return 50;
     }
 
 }
