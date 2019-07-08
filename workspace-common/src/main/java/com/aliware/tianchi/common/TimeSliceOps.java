@@ -13,6 +13,10 @@ public class TimeSliceOps {
 
     public static int seconds = 60;
 
+    public static volatile long startTime = 0;
+
+    public static volatile long prepareDelayTime = 5 * 1000L;
+
     private final static TimeSlice providerTs = new TimeSlice(slice, seconds);
 
     private final static Map<Invoker, TimeSlice> invokeTsMap = new ConcurrentHashMap<>();
@@ -35,30 +39,31 @@ public class TimeSliceOps {
 
     public static <T> Invoker<T> rebalance(List<Invoker<T>> invokers) {
 
-        if(invokeTsMap.size() == 0) {
+        if(invokeTsMap.size() != invokers.size()) {
             synchronized (invokeTsMap) {
-                if(invokeTsMap.size() == 0) {
+                if(invokeTsMap.size() != invokers.size()) {
                     invokers.stream().forEach(invoker -> {
                         invokeTsMap.put(invoker, new TimeSlice(slice, seconds));
                     });
+                    startTime = System.currentTimeMillis();
                 }
             }
         }
 
-        if(invokers != null && invokers.size() > 0) {
+        if(System.currentTimeMillis() - startTime > prepareDelayTime) {
             int[] okCounts = new int[invokers.size()];
             int okAll = 0;
-            for(int i=0; i< invokers.size(); i++) {
+            for (int i = 0; i < invokers.size(); i++) {
                 okCounts[i] = invokeTsMap.get(invokers.get(i)).beforeCount(RequestStat.OK);
                 okAll += okCounts[i];
             }
 
-            if(okAll > 0) {
+            if (okAll > 0) {
                 int random = ThreadLocalRandom.current().nextInt(okAll);
                 okAll = 0;
-                for(int i=0; i<okCounts.length; i++) {
+                for (int i = 0; i < okCounts.length; i++) {
                     int tmp = okAll + okCounts[i];
-                    if(random >= okAll && random < tmp) {
+                    if (random >= okAll && random < tmp) {
                         return invokers.get(i);
                     }
                     okAll = tmp;

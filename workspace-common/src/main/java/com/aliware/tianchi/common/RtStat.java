@@ -18,15 +18,9 @@ public class RtStat {
 
     private static LongAdder prepareCount = new LongAdder();
 
-    private static int slice = 1000;
+    private static int slice = 2000;
 
     private static long prepareDurationTimes = 10 * 1000L;
-
-//    private static long durationTimes = 3 * 60 * 10000L;
-
-//    private static LongAdder[] avgRt2 = null;
-//
-//    private static LongAdder[] avgCount2 = null;
 
     private static volatile int currentActiveCountTask = 10;
 
@@ -60,8 +54,8 @@ public class RtStat {
                     }
                 }
             }else {
-                prepareCost.add(cost);
                 prepareCount.increment();
+                prepareCost.add(cost);
             }
         }else {
             upCost.add(cost);
@@ -85,13 +79,14 @@ public class RtStat {
 
     public static void updateActive() {
         int newAvgRt = upCost.intValue() / upCount.intValue();
-        if(newAvgRt < baseAvgRt * 1.2) {
+        if(newAvgRt < baseAvgRt * 1.1) {
             updateNextActiveTaskCount(currentActiveCountTask);
         }else {
             updateBeforeActiveTaskCount(currentActiveCountTask);
         }
         LOGGER.info("currentActiveCountTask: " + currentActiveCountTask + ", baseAvgRt: " + baseAvgRt + ", newAvgRt: " + newAvgRt);upCost.reset();
         upCount.reset();
+        upCost.reset();
         startTime = System.currentTimeMillis();
     }
 
@@ -105,12 +100,12 @@ public class RtStat {
     }
 
     private static int getGap(int activeCountTask) {
-        if(activeCountTask < 100) {
-            return 10;
-        }else if(activeCountTask < 300) {
+        if(activeCountTask < 60) {
             return 20;
+        }else if(activeCountTask < 300) {
+            return 50;
         }else{
-            return 30;
+            return 80;
         }
     }
 

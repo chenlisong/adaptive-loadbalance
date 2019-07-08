@@ -27,9 +27,10 @@ public class TestClientFilter implements Filter {
             return result;
         }catch (Exception e){
             TimeSliceOps.request4Stat(invoker, RequestStat.FAIL);
-            throw e;
+//            throw e;
         }
 
+        return null;
     }
 
     @Override
