@@ -92,6 +92,7 @@ public class RtStat {
 
     public static void updateNextActiveTaskCount(int activeCountTask) {
         currentActiveCountTask = activeCountTask + getGap(activeCountTask);
+        currentActiveCountTask = currentActiveCountTask > 650 ? 649 : currentActiveCountTask;
     }
 
     public static void updateBeforeActiveTaskCount(int activeCountTask) {
@@ -100,9 +101,15 @@ public class RtStat {
     }
 
     private static int getGap(int activeCountTask) {
-        if(activeCountTask < 60) {
-            return 20;
-        }else if(activeCountTask < 300) {
+        if(activeCountTask < 190) {
+            return 45;
+        }else if(activeCountTask < 200) {
+            return 3;
+        }else if(activeCountTask < 440) {
+            return 40;
+        }else if(activeCountTask < 449) {
+            return 3;
+        }else if(activeCountTask < 650) {
             return 50;
         }else{
             return 80;
